@@ -150,11 +150,13 @@ const APIPage = () => {
             step={3}
             title="API Call"
             apiKey="api_call"
-            url="https://gw-apic.itzroks-50dreqbrsx-7ildvo-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud/financeorg/sandbox/openbankdemo/v1/consulta?cedula=1"
+            url="https://gw-apic.itzroks-50dreqbrsx-8cront-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud/fxnorg/sandbox/openapi/v1/accounts/acc001abc"
             method="GET"
             headers={{
               "Authorization": "Bearer " + responses?.get_token?.access_token,
-              "api-key": "0b17aa7007e0ec5f41f04cb65cd80f84"
+              "apikey": "3746f60262368d0a91222f903f927c4b",
+              "X-Request-ID": "1234567890",
+              "Consent-ID": "9874561230"
             }}
             disabled={!responses?.get_token?.access_token}
             setRequestAPIResponse={setRequestAPIResponse}
