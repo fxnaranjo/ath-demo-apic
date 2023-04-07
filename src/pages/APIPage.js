@@ -150,11 +150,11 @@ const APIPage = () => {
             step={3}
             title="API Call"
             apiKey="api_call"
-            url="https://gw-apic.itzroks-50dreqbrsx-8cront-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud/fxnorg/sandbox/openapi/v1/accounts/acc001abc"
+            url="https://gw-apic.itzroks-50dreqbrsx-li56c1-4b4a324f027aea19c5cbc0c3275c4656-0000.us-south.containers.appdomain.cloud/fxnorg/sandbox/openapi/v1/accounts/acc001abc"
             method="GET"
             headers={{
               "Authorization": "Bearer " + responses?.get_token?.access_token,
-              "apikey": "3746f60262368d0a91222f903f927c4b",
+              "apikey": "b33f1d806659499e369d70dadc70813c",
               "X-Request-ID": "1234567890",
               "Consent-ID": "9874561230"
             }}
