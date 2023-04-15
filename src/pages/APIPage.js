@@ -5,8 +5,13 @@ import RequestAPI from '../components/RequestAPI';
 import Information from '../components/Information';
 import Consents from '../components/Consents';
 
+
 const APIPage = () => {
-  const [clientId, setClientId] = useState("da28b60c-8930-4f02-b95e-63316c842845");
+  const [clientId, setClientId] = useState(process.env.REACT_APP_VERIFY_KEY);
+  const [gateway, setGateway] = useState(process.env.REACT_APP_GATEWAY);
+  const [apikey, setApikey] = useState(process.env.REACT_APP_API_KEY);
+
+
   const [tenantUri, setTenantUri] = useState("https://verifyla.verify.ibm.com");
   const [redirectUri, setRedirectUri] = useState(window.location.protocol + '//' + window.location.host);
   
@@ -60,6 +65,16 @@ const APIPage = () => {
       <div className="bx--row">
         <div className="bx--col-lg-3 site-information">
           <Information step={1} title="Información" />
+          <input id="gateway" type="hidden" defaultValue={process.env.REACT_APP_GATEWAY} />
+          <input type="hidden" defaultValue={process.env.REACT_APP_VERIFY_KEY} />
+          <input id="apikey" type="hidden" defaultValue={apikey}/>
+          <TextInput 
+            id="apikey" 
+            labelText="API Key" 
+            value={apikey} 
+            onChange={(e) => setApikey(e.currentTarget.value)} 
+            disabled={true} 
+          />
           <TextInput 
             id="tenantUri" 
             labelText="Tenant URI" 
@@ -150,11 +165,12 @@ const APIPage = () => {
             step={3}
             title="API Call"
             apiKey="api_call"
-            url="https://gw-apic.itzroks-50dreqbrsx-li56c1-4b4a324f027aea19c5cbc0c3275c4656-0000.us-south.containers.appdomain.cloud/fxnorg/sandbox/openapi/v1/accounts/acc001abc"
+            //url="https://gw-apic.itzroks-50dreqbrsx-pk3vib-4b4a324f027aea19c5cbc0c3275c4656-0000.us-east.containers.appdomain.cloud/fxnorg/sandbox/openapi/v1/accounts/fxnabc"
+            url={`${gateway}`}
             method="GET"
             headers={{
               "Authorization": "Bearer " + responses?.get_token?.access_token,
-              "apikey": "b33f1d806659499e369d70dadc70813c",
+              "apikey": apikey,
               "X-Request-ID": "1234567890",
               "Consent-ID": "9874561230"
             }}

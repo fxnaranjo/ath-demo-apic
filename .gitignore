@@ -1,2 +1,8 @@
 
 node_modules
+HELP
+Dockerfile
+deployment
+.dockerignore
+package.json
+build

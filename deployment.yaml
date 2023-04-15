@@ -1,0 +1,110 @@
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+  #name: react
+
+---
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: reactui-config
+#   namespace: react
+# data:
+#   REACT_APP_VERIFY_KEY: "da28b60c-8930-4f02-b95e-63316c842845"
+#   REACT_APP_GATEWAY: "https://gw-apic.itzroks-50dreqbrsx-pk3vib-4b4a324f027aea19c5cbc0c3275c4656-0000.us-east.containers.appdomain.cloud/fxnorg/sandbox/openapi/v1/accounts/fxnabc"
+#   REACT_APP_API_KEY: "cd065764eb5bc14e768759dd1da4076e"
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: reactui-config
+  namespace: react
+data:
+  .env: UkVBQ1RfQVBQX1ZFUklGWV9LRVk9ZGEyOGI2MGMtODkzMC00ZjAyLWI5NWUtNjMzMTZjODQyODQ1ClJFQUNUX0FQUF9HQVRFV0FZPSJodHRwczovL2d3LWFwaWMuaXR6cm9rcy01MGRyZXFicnN4LXBrM3ZpYi00YjRhMzI0ZjAyN2FlYTE5YzVjYmMwYzMyNzVjNDY1Ni0wMDAwLnVzLWVhc3QuY29udGFpbmVycy5hcHBkb21haW4uY2xvdWQvZnhub3JnL3NhbmRib3gvb3BlbmFwaS92MS9hY2NvdW50cy9meG4wMDEwMDIiClJFQUNUX0FQUF9BUElfS0VZPWNkMDY1NzY0ZWI1YmMxNGU3Njg3NTlkZDFkYTQwNzZl
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: reactui-config2
+  namespace: react
+data:
+  .env.production: UkVBQ1RfQVBQX1ZFUklGWV9LRVk9ZGEyOGI2MGMtODkzMC00ZjAyLWI5NWUtNjMzMTZjODQyODQ1ClJFQUNUX0FQUF9HQVRFV0FZPSJodHRwczovL2d3LWFwaWMuaXR6cm9rcy01MGRyZXFicnN4LXBrM3ZpYi00YjRhMzI0ZjAyN2FlYTE5YzVjYmMwYzMyNzVjNDY1Ni0wMDAwLnVzLWVhc3QuY29udGFpbmVycy5hcHBkb21haW4uY2xvdWQvZnhub3JnL3NhbmRib3gvb3BlbmFwaS92MS9hY2NvdW50cy9meG4wMDEwMDIiClJFQUNUX0FQUF9BUElfS0VZPWNkMDY1NzY0ZWI1YmMxNGU3Njg3NTlkZDFkYTQwNzZl
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reactui-deployment
+  labels:
+    app: reactui
+  namespace: react
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reactui
+  template:
+    metadata:
+      labels:
+        app: reactui
+    spec:
+      containers:
+      - name: reactui
+        image: fxnaranjom/api-react-ui:1
+        imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: "/app"
+            name: reactui-config
+            readOnly: true
+          - mountPath: "/app"
+            name: reactui-config2
+            readOnly: true
+        ports:
+        - containerPort: 8080
+      volumes:
+        - name: reactui-config
+          secret:
+            secretName: reactui-config
+        - name: reactui-config2
+          secret:
+            secretName: reactui-config2
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: reactui-svc
+  namespace: react
+spec:
+  selector:
+    app: reactui
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+
+---
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: apiui
+  namespace: react
+spec:
+  to:
+    kind: Service
+    name: reactui-svc
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: None
+  wildcardPolicy: None
